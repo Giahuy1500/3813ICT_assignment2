@@ -6,7 +6,7 @@ const http = require('http').Server(app);
 const { MongoClient, ObjectID } = require('mongodb');
 const cors = require('cors');
 const client = new MongoClient('mongodb://localhost:27017/');
-const dbName = 'chat-application';
+const dbName = 'chat_app';
 
 // parse requests
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -19,11 +19,13 @@ async function main() {
         console.log("Connected to MongoDB successfully");
 
         const db = client.db(dbName);
-        const collection = db.collection('products');
         //Setup routes
-
+        
     } catch (err) {
         console.error("Failed to connect to MongoDB:", err);
+    }
+    finally {
+        await client.close();
     }
 }
 
