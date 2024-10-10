@@ -1,9 +1,8 @@
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { User } from '../models/user.model';
-import { UserManagementService } from '../service/user-management.service';
-import { group } from '@angular/animations';
+import { User } from '../../models/user.model';
+import { UserManagementService } from '../../service/user-management.service';
 @Component({
   selector: 'app-create-user',
   standalone: true,

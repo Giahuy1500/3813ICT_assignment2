@@ -19,7 +19,7 @@ export const routes: Routes = [
       {
         path: 'create-user',
         loadComponent: () =>
-          import('../app/create-user/create-user.component').then(
+          import('../app/front-end/create-user/create-user.component').then(
             (m) => m.CreateUserComponent
           ),
       },
