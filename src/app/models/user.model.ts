@@ -1,19 +1,18 @@
 export class User {
-  private id: string;
-  private username: string;
-  private email: string;
-  private password: string;
-  private groups: any[];
-  private role: any[];
+  // public fields instead of private
+  public username: string;
+  public email: string;
+  public password: string;
+  public groups: any[];
+  public role: any;
+
   constructor(
-    id: string,
-    username: string,
-    email: string,
-    password: string,
-    groups: any[],
-    role: any[]
+    username: string = '',
+    email: string = '',
+    password: string = '',
+    groups: any[] = [],
+    role: any = null
   ) {
-    this.id = id;
     this.username = username;
     this.email = email;
     this.password = password;

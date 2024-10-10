@@ -81,3 +81,8 @@
     }
   }
   
+  .error-message {
+    color: red;
+    padding-top: 10px;
+    text-align: center;
+  }
