@@ -1,9 +1,6 @@
-export class Group {
+import { User } from './user.model';
+export interface Group {
   channels: any[];
-  id: number;
-
-  constructor(channels: any[], id: number) {
-    this.channels = channels;
-    this.id = id;
-  }
+  name: string;
+  users: User[];
 }

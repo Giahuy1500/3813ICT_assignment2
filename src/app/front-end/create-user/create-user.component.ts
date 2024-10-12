@@ -42,7 +42,7 @@ export class CreateUserComponent {
         this.resetForm(); // Reset the form after successful submission
       },
       error: (err) => {
-        this.errorMessage = 'Error creating user ';
+        this.errorMessage = 'Error creating user ' + err.message;
         this.isLoading = false; // Stop loading on error
       },
     });

@@ -7,7 +7,9 @@ import { HttpClient } from '@angular/common/http';
 export class AuthenticationService {
   private baseUrl = 'http://localhost:3030/api';
   constructor(private http: HttpClient) {}
-  login(user: User) {
+  login(email: string, password: string) {
+    const user = { email, password };
+
     return this.http.post<any>(`${this.baseUrl}/login`, user);
   }
 }

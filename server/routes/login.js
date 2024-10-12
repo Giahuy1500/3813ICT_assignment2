@@ -1,20 +1,26 @@
-module.exports = function(app, db) {
-    app.post('/api/login', async (req, res) => {
-        if (!req.body) {
-            return res.sendStatus(400);
+module.exports = function (db, app) {
+  app.post("/api/login", (req, res) => {
+    if (!req.body) {
+      return res.sendStatus(400); // Bad Request
+    }
+
+    const user = req.body;
+    console.log(user);
+    const collection = db.collection("users"); // Access the 'user' collection
+
+    // Find the user with matching username and password
+    collection
+      .findOne({ email: user.email, password: user.password })
+      .then((data) => {
+        if (data) {
+          return res.send({ status: "ok" });
+        } else {
+          return res.send({ err: "login failed" });
         }
-        const user = req.body;
-        try {
-            const collection = db.collection('user'); // Corrected to 'collection'
-            const data = await collection.findOne({ username: user.username, password: user.password });
-            if (data) {
-                return res.send({ status: "ok" });
-            } else {
-                return res.send({ err: "login failed" });
-            }
-        } catch (error) {
-            console.error(error);
-            return res.sendStatus(500); // Internal Server Error
-        }
-    });
+      })
+      .catch((error) => {
+        console.error(error);
+        return res.sendStatus(500); // Internal Server Error
+      });
+  });
 };
