@@ -1,6 +1,8 @@
 const express = require("express");
 const bodyParser = require("body-parser");
-
+const path = require("path");
+const multer = require("multer");
+const upload = multer({ dest: "uploads/" });
 const PORT = 3030;
 const app = express();
 const http = require("http").Server(app);
@@ -33,6 +35,15 @@ const db = client.db(dbName);
 //Set up routes
 require("./routes/create-user.js")(db, app);
 require("./routes/login.js")(db, app);
-require("./routes/create-group.js")(db, app);
-require("./routes/load-group.js")(db, app);
-require("./routes/delete-group.js")(db, app);
+require("./routes/group-operation.js")(db, app);
+require("./routes/channel-operation.js")(db, app);
+
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));
+
+app.post("/upload/chat", upload.single("chatImage"), (req, res) => {
+  if (!req.file) {
+    return res.status(400).send("No file uploaded.");
+  }
+  const filePath = path.join("uploads", req.file.filename);
+  res.send({ filePath });
+});

@@ -22,15 +22,49 @@
         <div class="card-body">
           <h3 class="card-title">{{ group.name }}</h3>
           <div class="mt-3 d-grid gap-2">
-            <button class="btn btn-secondary">Create Channel</button>
-            <button class="btn btn-outline-primary">Add Member</button>
-            <button class="btn btn-outline-danger">Ban Member</button>
+            <button
+              class="btn btn-secondary"
+              (click)="openCreateChannelModal(group)"
+            >
+              Create Channel
+            </button>
             <button
               class="btn btn-outline-danger"
-              (click)="openDeleteModal(group)"
+              (click)="openAddUserToGroupModal(group)"
+            >
+              Add user
+            </button>
+            <button
+              class="btn btn-outline-danger"
+              (click)="openDeleteUserFromGroup(group)"
+            >
+              Ban user
+            </button>
+            <button
+              class="btn btn-outline-danger"
+              (click)="openDeleteGroupModal(group)"
             >
               Delete Group
             </button>
+          </div>
+
+          <!-- Channels List -->
+          <div class="mt-4" *ngFor="let channel of group.channels">
+            <div class="card shadow-sm">
+              <div class="card-body">
+                <h4 class="card-title">Channel: {{ channel.name }}</h4>
+                <div class="mt-3 d-grid gap-2">
+                  <button
+                    class="btn btn-outline-danger"
+                    (click)="deleteChannel(group, channel)"
+                  >
+                    Delete Channel
+                  </button>
+                </div>
+
+                <!-- Channel Users List -->
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -38,14 +72,66 @@
   </div>
 </div>
 
-<div class="modal-backdrop" *ngIf="isModalVisible"></div>
-<!-- Modal backdrop -->
+<div *ngIf="showDeleteUserFromGroupModal" class="modal">
+  <div class="modal-content">
+    <h5>Delete User to {{ selectedGroup?.name }}</h5>
+    <input
+      type="text"
+      [(ngModel)]="newUserName"
+      placeholder="User Name"
+      class="form-control"
+    />
+    <button class="btn btn-primary mt-2" (click)="removeUserFromGroup()">
+      Delete
+    </button>
+    <button class="btn btn-secondary mt-2" (click)="closeModal()">
+      Cancel
+    </button>
+  </div>
+</div>
+
+<div *ngIf="showAddUserToGroupModal" class="modal">
+  <div class="modal-content">
+    <h5>Add User to {{ selectedChannel?.name }}</h5>
+    <input
+      type="text"
+      [(ngModel)]="newUserName"
+      placeholder="User Name"
+      class="form-control"
+    />
+    <button class="btn btn-primary mt-2" (click)="addUserToGroup()">Add</button>
+    <button class="btn btn-secondary mt-2" (click)="closeModal()">
+      Cancel
+    </button>
+  </div>
+</div>
+
+<div *ngIf="showCreateChannelModal" class="modal">
+  <div class="modal-content">
+    <h5>Create Channel for {{ selectedGroup?.name }}</h5>
+    <input
+      type="text"
+      [(ngModel)]="newChannelName"
+      placeholder="Channel Name"
+      class="form-control"
+    />
+    <button class="btn btn-primary mt-2" (click)="createChannel()">
+      Create
+    </button>
+    <button class="btn btn-secondary mt-2" (click)="closeModal()">
+      Cancel
+    </button>
+  </div>
+</div>
+
+<div class="modal-backdrop" *ngIf="showDeleteGroupModal"></div>
+
 <div
   class="modal fade show"
   tabindex="-1"
   aria-labelledby="deleteGroupModalLabel"
   aria-hidden="true"
-  *ngIf="isModalVisible"
+  *ngIf="showDeleteGroupModal"
 >
   <div class="modal-dialog">
     <div class="modal-content">

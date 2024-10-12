@@ -1,7 +1,6 @@
 export interface Message {
-  id: number;
-  senderId: number;
-  content: string;
-  grpId: number;
-  time: Date;
+  user: string;
+  text?: string;
+  imageUrl?: string;
+  timestamp: Date;
 }

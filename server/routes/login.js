@@ -13,7 +13,7 @@ module.exports = function (db, app) {
       .findOne({ email: user.email, password: user.password })
       .then((data) => {
         if (data) {
-          return res.send({ status: "ok" });
+          return res.send({ status: "ok", user: user.email });
         } else {
           return res.send({ err: "login failed" });
         }

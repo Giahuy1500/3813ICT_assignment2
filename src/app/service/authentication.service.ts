@@ -9,7 +9,9 @@ export class AuthenticationService {
   constructor(private http: HttpClient) {}
   login(email: string, password: string) {
     const user = { email, password };
-
     return this.http.post<any>(`${this.baseUrl}/login`, user);
+  }
+  loadUser() {
+    return this.http.get<any>(`${this.baseUrl}/load-users`);
   }
 }

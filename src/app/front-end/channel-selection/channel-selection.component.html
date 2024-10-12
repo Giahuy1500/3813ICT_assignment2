@@ -1,0 +1,32 @@
+<div class="container">
+  <h2>Select a Group and Channels</h2>
+
+  <!-- Group Selection -->
+  <div class="group-select">
+    <label for="group">Select Group:</label>
+    <select
+      id="group"
+      [(ngModel)]="selectedGroup"
+      (change)="onGroupChange(selectedGroup)"
+    >
+      <option value="">--Select Group--</option>
+      <option *ngFor="let group of groups" [ngValue]="group">
+        {{ group.name }}
+      </option>
+    </select>
+  </div>
+
+  <!-- Channel Selection -->
+  <div class="channel-select">
+    <label for="channels">Select Channels:</label>
+    <select id="channels" multiple [(ngModel)]="selectedChannels">
+      <option *ngFor="let channel of channels" [value]="channel">
+        {{ channel.name }}
+      </option>
+    </select>
+  </div>
+
+  <!-- Submit Button -->
+  <button class="submit-btn" (click)="joinChannel()">Join Channel</button>
+  <button class="submit-btn" (click)="leaveChannel()">Leave Channel</button>
+</div>

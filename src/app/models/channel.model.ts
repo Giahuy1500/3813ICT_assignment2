@@ -1,5 +1,5 @@
-import { User } from './user.model';
+import { Message } from './message.model';
 export interface Channel {
-  users: User[];
   name: string;
+  messages: Message[];
 }

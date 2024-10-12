@@ -20,6 +20,8 @@ export class LoginComponent {
   handleSubmit() {
     this.authService.login(this.email, this.password).subscribe((data) => {
       if (data.status == 'ok') {
+        localStorage.setItem('userData', JSON.stringify(data.user));
+        console.log(data);
         this.router.navigateByUrl('/home');
       }
     });

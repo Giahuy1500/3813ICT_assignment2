@@ -1,6 +1,6 @@
 import { User } from './user.model';
+import { Channel } from './channel.model';
 export interface Group {
-  channels: any[];
+  channels: Channel[];
   name: string;
-  users: User[];
 }

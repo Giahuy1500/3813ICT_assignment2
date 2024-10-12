@@ -1,0 +1,44 @@
+<div class="chat-window">
+  <div class="messages">
+    <div *ngFor="let message of messages">
+      <strong>{{ message.user }}:</strong>
+      <span *ngIf="message.text">{{ message.text }}</span>
+      <span *ngIf="message.imageUrl">
+        <img [src]="message.imageUrl" alt="Image" class="chat-image" />
+      </span>
+      <small>({{ message.timestamp | date : "shortTime" }})</small>
+    </div>
+  </div>
+
+  <!-- New buttons for video chat and meeting -->
+  <div class="chat-controls">
+    <button (click)="startVideoChat()" *ngIf="!isVideoChatActive">
+      Start Video Chat
+    </button>
+    <button (click)="stopVideoChat()" *ngIf="isVideoChatActive">
+      Stop Video Chat
+    </button>
+    <button (click)="startMeeting()" *ngIf="!isMeetingActive">
+      Start Meeting
+    </button>
+    <button (click)="stopMeeting()" *ngIf="isMeetingActive">
+      Stop Meeting
+    </button>
+  </div>
+
+  <div class="message-input">
+    <input [(ngModel)]="messageInput" placeholder="Type your message" />
+    <input type="file" (change)="onFileSelected($event)" />
+    <button (click)="sendMessage()" class="btn btn-primary">Send</button>
+  </div>
+  <div>
+    <div class="video-container"></div>
+    <video #localVideo autoplay></video>
+  </div>
+</div>
+
+<div>
+  <div class="video-container"></div>
+  <video #localVideo autoplay></video>
+  <video #remoteVideo autoplay></video>
+</div>

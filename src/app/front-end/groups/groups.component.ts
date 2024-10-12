@@ -5,7 +5,7 @@ import { Group } from '../../models/group.model';
 import { User } from '../../models/user.model';
 import { Channel } from '../../models/channel.model';
 import { GroupService } from '../../service/group.service';
-import { group } from '@angular/animations';
+import { AuthenticationService } from '../../service/authentication.service';
 @Component({
   selector: 'app-groups',
   standalone: true,
@@ -14,17 +14,23 @@ import { group } from '@angular/animations';
   styleUrl: './groups.component.css',
 })
 export class GroupsComponent {
-  @ViewChild('deleteModal') deleteModal!: ElementRef;
   groups: Group[] = [];
   users: User[] = [];
-  selectedGroupForChannel: any;
+  selectedChannel: any;
   selectedGroup: any;
   newGroupName: string = '';
   newChannelName: string = '';
+  newUserName: string = '';
   selectedUserId: string = '';
-  isModalVisible: boolean = false; // Controls modal visibility
-
-  constructor(private groupService: GroupService) {}
+  //variable for modal
+  showDeleteGroupModal: boolean = false;
+  showCreateChannelModal: boolean = false;
+  showAddUserToGroupModal: boolean = false;
+  showDeleteUserFromGroupModal: boolean = false;
+  constructor(
+    private groupService: GroupService,
+    private authService: AuthenticationService
+  ) {}
 
   ngOnInit() {
     this.loadGroups();
@@ -35,31 +41,85 @@ export class GroupsComponent {
       this.groups = data.groups;
     });
   }
-  loadUsers() {}
+  loadUsers() {
+    this.authService.loadUser().subscribe((data) => {
+      this.users = data.users;
+    });
+  }
   createGroup() {
-    let group: Group = { name: this.newGroupName, users: [], channels: [] };
+    let group: Group = { name: this.newGroupName, channels: [] };
     this.groupService.createGroup(group).subscribe((data) => {
       this.groups.push(data.group);
     });
   }
-  openDeleteModal(group: any) {
+  openDeleteUserFromGroup(group: any) {
     this.selectedGroup = group;
-    this.isModalVisible = true; // Show the modal
+    this.showDeleteUserFromGroupModal = true;
   }
+  openCreateChannelModal(group: any) {
+    this.selectedGroup = group;
+    this.showCreateChannelModal = true;
+  }
+  openDeleteGroupModal(group: any) {
+    this.selectedGroup = group;
+    this.showDeleteGroupModal = true; // Show the modal
+  }
+  openAddUserToGroupModal(group: any) {
+    this.selectedGroup = group;
+    this.showAddUserToGroupModal = true;
+  }
+
   closeModal() {
-    this.isModalVisible = false; // Hide the modal
+    this.showDeleteGroupModal = false; // Hide the modal
+    this.showAddUserToGroupModal = false;
+    this.showCreateChannelModal = false;
+    this.showDeleteUserFromGroupModal = false;
   }
-  addChannel(channelID: any) {}
-  addUserToGroup(groupId: any) {}
-  removeUserFromGroup(groupId: any, user: any) {}
-  removeUserFromChannel(groupId: any, channelID: any, user: any) {}
+
+  addUserToGroup() {
+    this.groupService
+      .addUserToGroup(this.selectedGroup, this.newUserName)
+      .subscribe((data) => {
+        console.log(data);
+        this.showAddUserToGroupModal = false;
+      });
+  }
+  removeUserFromGroup() {
+    console.log(this.selectedGroup, this.newUserName);
+    this.groupService
+      .removeUserToGroup(this.selectedGroup, this.newUserName)
+      .subscribe((data) => {
+        console.log(data);
+        this.showDeleteUserFromGroupModal = false;
+      });
+  }
   deleteGroup(group: any) {
     this.groupService.deleteGroup(group).subscribe((data) => {
       this.groups = this.groups.filter((g) => g !== group);
       console.log('Group deleted:', group);
     });
-    this.isModalVisible = false;
+    this.showDeleteGroupModal = false;
   }
-  removeChannel(groupId: any, channelID: any) {}
-  addUserToChannel() {}
+  deleteChannel(group: any, channel: any) {
+    this.groupService
+      .deleteChannel(group._id, channel.name)
+      .subscribe((data) => {
+        group.channels = group.channels.filter(
+          (c: any) => c.name !== channel.name
+        );
+      });
+  }
+  createChannel() {
+    let channel: Channel = {
+      name: this.newChannelName,
+      messages: [],
+    };
+    this.groupService
+      .createChannel(this.selectedGroup._id, channel)
+      .subscribe((data) => {
+        this.selectedGroup.channels.push(channel);
+        this.newChannelName = '';
+        this.showCreateChannelModal = false;
+      });
+  }
 }
